@@ -20,15 +20,22 @@ def plotSigmoid():
 
 # # Logistic 代价函数
 def cost(theta, x, y):
-    theta = np.matrix(theta)
-    x = np.matrix(x)
-    y = np.matrix(y)
+    theta = np.mat(theta)       # n * 1
+    x = np.mat(x)       # m * n
+    y = np.mat(y)       # m * 1
 
-    r1 = np.multiply(-y, np.log(sigmoid(x * theta.T)))
-    r2 = np.multiply(-(1 - y), np.log(1 - sigmoid(x * theta.T)))
+    r1 = np.multiply(-y, np.log(sigmoid(x * theta)))
+    r2 = np.multiply(-(1 - y), np.log(1 - sigmoid(x * theta)))
 
     return np.sum(r1 + r2) / len(x)
 
+
+def classifyVector(X, theta):
+    prob = sigmoid(sum(X*theta))
+    if prob >= 0.5:
+        return 1
+    else:
+        return 0
 
 # # 梯度上升算法， 求解 theta 最大值
 def gradAscent(trainingSet, trainingLabels, maxCycles=500):
@@ -37,9 +44,20 @@ def gradAscent(trainingSet, trainingLabels, maxCycles=500):
     m, n = trainingSet.shape        # 获取参数矩阵大小 m * n
     theta = np.ones((n, 1))     # 待计算参数向量, n * 1
     alpha = 0.001       # 学习率，梯度下降速率
+    costList = []       # 代价函数变化趋势
     for k in range(maxCycles):
         error = trainingLabels - sigmoid(trainingSet*theta)
         theta = theta + alpha * trainingSet.transpose() * error
+        costList.append(cost(theta, trainingSet, trainingLabels))
+
+    # # 绘制 代价函数 随 迭代次数的变化情况
+    fig = plt.figure()
+    axis = fig.add_subplot()
+    axis.plot(range(maxCycles), costList)
+    plt.title("cost function")
+    plt.xlabel('cycles')
+    plt.ylabel('cost')
+
     # 将矩阵转换为数组
     return np.array(theta)
 
