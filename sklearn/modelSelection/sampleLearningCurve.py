@@ -80,7 +80,7 @@ def plot_learning_curve(
 	ylim=None,      # 曲线绘制范围 (y_min, y_max)
 	cv=None,        # 交叉验证生成器
 	n_jobs=None,    # 并行线程，-1为使用所有线程
-	scoring=None,   # 模型评估规则 (scikit-learn.org/stable/modules/model_evaluation.html#scoring-parameter)
+	scoring=None,   # 模型评估规则
 	train_sizes=np.linspace(0.1, 1.0, 5),       # 用于学习曲线的样本相对量
 ):
 
@@ -166,7 +166,6 @@ def plot_learning_curve(
 	axes[2].set_ylabel("Score")
 	axes[2].set_title("Performance of the model")
 
-	plt.show()
 	return plt
 
 
